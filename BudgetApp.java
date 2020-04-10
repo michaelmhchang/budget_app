@@ -209,10 +209,30 @@ public class BudgetApp {
             mainPanel.add(amountField, createSubGbc(1,1));
             mainPanel.add(saveButton, createSubGbc(0,2));
             mainPanel.add(cancelButton, createSubGbc(1,2));
+
+            saveButton.addActionListener(new SaveSpendingActionListener());
             
             frame.setSize(500, 300);
 
             cancelButton.addActionListener(new CancelButtonListener());
+        }
+
+        class SaveSpendingActionListener implements ActionListener {
+            private Expense income;
+            private String name;
+            private double amount;
+
+            public void actionPerformed(ActionEvent ev) {
+                name = nameField.getText();
+                amount = Double.parseDouble(amountField.getText()) * -1; 
+                
+                income = new Expense(name, "Income", amount);
+
+                expenseList.add(income);
+
+                nameField.setText("");
+                amountField.setText("");
+            }
         }
     }
 
@@ -221,7 +241,8 @@ public class BudgetApp {
     class ReportListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
             for(Expense ex: expenseList) {
-                System.out.println(ex.getName());
+                System.out.print(ex.getName());
+                System.out.println(" " + ex.getAmount());
             }
         }
     }
