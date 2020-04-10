@@ -4,10 +4,11 @@ Oh hi there, this is a simple budgeting app I'm working on. Any critique or upda
 # Features so far
 - Main menu GUI
 - Income/Spending GUI
-- Income saves to a lists of expenses
+- Income saves to a list of expenses
+- Spendings saves to a list of expense
 
 # Future Features 
-- Spendings saves to the lists of expenses
+- ~~Spendings saves to the lists of expenses~~
 - Report GUI (Includes all Income, spendings, and the total saved or lost in table format) 
 - Serialize objects so that previous sessions can be loaded up
 - Export report to PDF (Maybe)

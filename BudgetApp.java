@@ -226,7 +226,7 @@ public class BudgetApp {
                 name = nameField.getText();
                 amount = Double.parseDouble(amountField.getText()) * -1; 
                 
-                income = new Expense(name, "Income", amount);
+                income = new Expense(name, "Spending", amount);
 
                 expenseList.add(income);
 
