@@ -1,9 +1,10 @@
+import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
 public class BudgetApp {
-    private double total; 
+    // Main Menu
     private GridBagConstraints gbc;
     private JFrame frame;
     private JPanel mainPanel;
@@ -14,17 +15,26 @@ public class BudgetApp {
     private JButton addSpending;
     private JButton report;
 
+    // Submenu
+    private static JTextField nameField;
+    private static JTextField amountField;
+
+    // Calculating final report
+    private static ArrayList<Expense> expenseList;
+
+
+    public BudgetApp() {
+        expenseList = new ArrayList<Expense>();
+    }
 
     public static void main(String[] args) {
         BudgetApp testApp = new BudgetApp();
-
         testApp.activateMenu();
     }
 
 
     public void activateMenu() {
-        // Main UI stuff goes here
-        // Including report window? 
+        // Main menu UI
 
         frame = new JFrame("Budget app v1.0.0");
         mainPanel = new JPanel();
@@ -45,6 +55,7 @@ public class BudgetApp {
 
         addIncome.addActionListener(new AddIncomeListener());
         addSpending.addActionListener(new AddSpendingListener());
+        report.addActionListener(new ReportListener());
 
         frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
         frame.setSize(400, 400);
@@ -55,6 +66,8 @@ public class BudgetApp {
 
 
     public void reactivateMenu() {
+        // For going back to the main menu again
+
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
@@ -77,6 +90,7 @@ public class BudgetApp {
 
         addIncome.addActionListener(new AddIncomeListener());
         addSpending.addActionListener(new AddSpendingListener());
+        report.addActionListener(new ReportListener());
 
         addIncome.setPreferredSize(addSpending.getPreferredSize());
 
@@ -119,8 +133,7 @@ public class BudgetApp {
         private JButton saveButton;
         private JLabel name;
         private JLabel amount;
-        private JTextField nameField;
-        private JTextField amountField;
+       
 
         public void actionPerformed(ActionEvent ev) {
             mainPanel.removeAll();
@@ -131,7 +144,7 @@ public class BudgetApp {
 
             name = new JLabel("Income Label: ");
             nameField = new JTextField(10);
-            amount = new JLabel("<html>Amount of money <br/>in da bank!  <html>");
+            amount = new JLabel("<html>Amount of money <br/>in da bank!  </html>");
             amountField = new JTextField(10);
             saveButton = new JButton("Report income");
             cancelButton = new JButton("Return to main menu");
@@ -143,13 +156,33 @@ public class BudgetApp {
             mainPanel.add(amountField, createSubGbc(1,1));
             mainPanel.add(saveButton, createSubGbc(0,2));
             mainPanel.add(cancelButton, createSubGbc(1,2));
+
+            saveButton.addActionListener(new SaveIncomeActionListener());
             
             frame.setSize(500, 300);
 
             cancelButton.addActionListener(new CancelButtonListener());
         }
 
-          }
+
+        class SaveIncomeActionListener implements ActionListener {
+            private Expense income;
+            private String name;
+            private double amount;
+
+            public void actionPerformed(ActionEvent ev) {
+                name = nameField.getText();
+                amount = Double.parseDouble(amountField.getText()); 
+                
+                income = new Expense(name, "Income", amount);
+
+                expenseList.add(income);
+
+                nameField.setText("");
+                amountField.setText("");
+            }
+        }
+    }
 
 
     class AddSpendingListener implements ActionListener {
@@ -157,9 +190,6 @@ public class BudgetApp {
         private JButton saveButton;
         private JLabel name;
         private JLabel amount;
-        private JTextField nameField;
-        private JTextField amountField;
-
 
         public void actionPerformed(ActionEvent ev) {
             mainPanel.removeAll();
@@ -167,7 +197,7 @@ public class BudgetApp {
             mainPanel.repaint();
             name = new JLabel("Spending label");
             nameField = new JTextField(10);
-            amount = new JLabel("Amount you wasting!!!!");
+            amount = new JLabel("<html>Amount you <br/>wasting!!!!</html>");
             amountField = new JTextField(10);
             saveButton = new JButton("Report income");
             cancelButton = new JButton("Return to main menu");
@@ -183,6 +213,16 @@ public class BudgetApp {
             frame.setSize(500, 300);
 
             cancelButton.addActionListener(new CancelButtonListener());
+        }
+    }
+
+    
+    // Need to continue updating (used for testing for now)
+    class ReportListener implements ActionListener {
+        public void actionPerformed(ActionEvent ev) {
+            for(Expense ex: expenseList) {
+                System.out.println(ex.getName());
+            }
         }
     }
 
