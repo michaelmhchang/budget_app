@@ -11,6 +11,7 @@ Oh hi there, this is a simple budgeting app I'm working on. Any critique or upda
 - ~~Spendings saves to the lists of expenses~~
 - Report GUI (Includes all Income, spendings, and the total saved or lost in table format) 
 - Serialize objects so that previous sessions can be loaded up
+- More professional labels (Just making things a bit more fun with current labels) 
 - Export report to PDF (Maybe)
 - Produce daily, weekly, monthly, and yearly reports (Maybe)
 - Network socket connections (Big maybe)

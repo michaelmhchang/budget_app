@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class BudgetApp {
     // Main Menu
-    private GridBagConstraints gbc;
     private JFrame frame;
     private JPanel mainPanel;
     private JLabel title;
@@ -32,8 +31,8 @@ public class BudgetApp {
         testApp.activateMenu();
     }
 
-
-    public void activateMenu() {
+// --------------------------------------- ACTIVATE GRAPHICS ---------------------------------------  
+    private void activateMenu() {
         // Main menu UI
 
         frame = new JFrame("Budget app v1.0.0");
@@ -65,7 +64,7 @@ public class BudgetApp {
     }
 
 
-    public void reactivateMenu() {
+    private void reactivateMenu() {
         // For going back to the main menu again
 
         mainPanel.removeAll();
@@ -97,7 +96,48 @@ public class BudgetApp {
         frame.setSize(400, 400);
     }
 
+    
+    class SubMenu {
+        private JLabel name;
+        private JLabel amount;
+        private JButton saveButton;
+        private JButton cancelButton;
 
+        public SubMenu(String name, String amount, String saveButton) {
+            this.name = new JLabel(name);
+            nameField = new JTextField();
+            this.amount = new JLabel(amount);
+            amountField = new JTextField();
+            this.saveButton = new JButton(saveButton);
+            cancelButton = new JButton("Cancel");
+        }
+
+        public void setup(String type) {
+            mainPanel.setLayout(new GridBagLayout());
+
+            mainPanel.setBorder(BorderFactory.createTitledBorder(type));
+            mainPanel.add(name, createSubGbc(0,0));
+            mainPanel.add(nameField, createSubGbc(1,0));
+            mainPanel.add(amount, createSubGbc(0,1));
+            mainPanel.add(amountField, createSubGbc(1,1));
+            mainPanel.add(saveButton, createSubGbc(0,2));
+            mainPanel.add(cancelButton, createSubGbc(1,2));
+
+            cancelButton.setPreferredSize(saveButton.getPreferredSize());
+
+            nameField.setPreferredSize(cancelButton.getPreferredSize());
+            amountField.setPreferredSize(cancelButton.getPreferredSize());
+
+            saveButton.addActionListener(new SaveListener(type));
+            cancelButton.addActionListener(new CancelButtonListener());
+        }
+
+    }
+
+// ----------------------------------------------------------------------------------------------------  
+
+
+// --------------------------------------- GRID BAG CONSTRAINTS ---------------------------------------  
     private GridBagConstraints createMainGbc(int x, int y) {
         GridBagConstraints gbc = new GridBagConstraints();
         final Insets SPACING = new Insets(0, 5, 5 ,5);
@@ -127,130 +167,96 @@ public class BudgetApp {
         return gbc;
     }
 
+// ------------------------------------------------------------------------------------------------  
+
+
+// --------------------------------------- ACTION LISTENERS ---------------------------------------  
 
     class AddIncomeListener implements ActionListener {
-        private JButton cancelButton;
-        private JButton saveButton;
-        private JLabel name;
-        private JLabel amount;
-       
-
         public void actionPerformed(ActionEvent ev) {
             mainPanel.removeAll();
             mainPanel.revalidate();
             mainPanel.repaint();
-
-            mainPanel.setLayout(new GridBagLayout());
-
-            name = new JLabel("Income Label: ");
-            nameField = new JTextField(10);
-            amount = new JLabel("<html>Amount of money <br/>in da bank!  </html>");
-            amountField = new JTextField(10);
-            saveButton = new JButton("Report income");
-            cancelButton = new JButton("Return to main menu");
-
-            mainPanel.setBorder(BorderFactory.createTitledBorder("Income"));
-            mainPanel.add(name, createSubGbc(0,0));
-            mainPanel.add(nameField, createSubGbc(1,0));
-            mainPanel.add(amount, createSubGbc(0,1));
-            mainPanel.add(amountField, createSubGbc(1,1));
-            mainPanel.add(saveButton, createSubGbc(0,2));
-            mainPanel.add(cancelButton, createSubGbc(1,2));
-
-            saveButton.addActionListener(new SaveIncomeActionListener());
-            
             frame.setSize(500, 300);
 
-            cancelButton.addActionListener(new CancelButtonListener());
-        }
+            SubMenu incomeMenu = new SubMenu(
+                    "Income Label",
+                    "<html>Amount of money <br/>in da bank!  </html>",
+                    "Report income"); 
 
-
-        class SaveIncomeActionListener implements ActionListener {
-            private Expense income;
-            private String name;
-            private double amount;
-
-            public void actionPerformed(ActionEvent ev) {
-                name = nameField.getText();
-                amount = Double.parseDouble(amountField.getText()); 
-                
-                income = new Expense(name, "Income", amount);
-
-                expenseList.add(income);
-
-                nameField.setText("");
-                amountField.setText("");
-            }
+            incomeMenu.setup("Income");
         }
     }
 
 
     class AddSpendingListener implements ActionListener {
-        private JButton cancelButton;
-        private JButton saveButton;
-        private JLabel name;
-        private JLabel amount;
-
         public void actionPerformed(ActionEvent ev) {
             mainPanel.removeAll();
             mainPanel.revalidate();
             mainPanel.repaint();
-            name = new JLabel("Spending label");
-            nameField = new JTextField(10);
-            amount = new JLabel("<html>Amount you <br/>wasting!!!!</html>");
-            amountField = new JTextField(10);
-            saveButton = new JButton("Report income");
-            cancelButton = new JButton("Return to main menu");
-
-            mainPanel.setBorder(BorderFactory.createTitledBorder("Spending"));
-            mainPanel.add(name, createSubGbc(0,0));
-            mainPanel.add(nameField, createSubGbc(1,0));
-            mainPanel.add(amount, createSubGbc(0,1));
-            mainPanel.add(amountField, createSubGbc(1,1));
-            mainPanel.add(saveButton, createSubGbc(0,2));
-            mainPanel.add(cancelButton, createSubGbc(1,2));
-
-            saveButton.addActionListener(new SaveSpendingActionListener());
-            
             frame.setSize(500, 300);
 
-            cancelButton.addActionListener(new CancelButtonListener());
+            SubMenu spendingMenu = new SubMenu(
+                    "Spending label",
+                    "<html>Amount you <br/>wasting!!!!</html>",
+                    "Report spending");
+
+            spendingMenu.setup("Spending");
+        }
+    }
+
+    class SaveListener implements ActionListener {
+        private String name;
+        private double amount;
+        private String type;
+
+        public SaveListener(String type) {
+            this.type = type;
         }
 
-        class SaveSpendingActionListener implements ActionListener {
-            private Expense income;
-            private String name;
-            private double amount;
+        public void actionPerformed(ActionEvent ev) {
+            name = nameField.getText();
+            amount = Double.parseDouble(amountField.getText());
+            expenseList.add(new Expense(name, "Income", amount));
 
-            public void actionPerformed(ActionEvent ev) {
-                name = nameField.getText();
-                amount = Double.parseDouble(amountField.getText()) * -1; 
-                
-                income = new Expense(name, "Spending", amount);
-
-                expenseList.add(income);
-
-                nameField.setText("");
-                amountField.setText("");
-            }
+            nameField.setText("");
+            amountField.setText("");
         }
     }
 
     
     // Need to continue updating (used for testing for now)
     class ReportListener implements ActionListener {
+        private JFrame reportFrame;
+        private JPanel reportPanel;
+        private JTable reportTable;
+        private JScrollPane scrollReport;
+
         public void actionPerformed(ActionEvent ev) {
-            for(Expense ex: expenseList) {
-                System.out.print(ex.getName());
-                System.out.println(" " + ex.getAmount());
-            }
+            reportFrame =  new JFrame("Report");
+            reportPanel = new JPanel();
+
+            String[] colNames = {"Date", "Name", "Income", "Spendings"};
+            Object[][] data = {{1,2,3,4}};
+            
+            reportTable = new JTable(data, colNames);
+            scrollReport = new JScrollPane(reportTable);
+
+            reportPanel.add(scrollReport);
+
+            reportFrame.getContentPane().add(BorderLayout.CENTER, reportPanel);
+            reportFrame.pack();
+            reportFrame.setVisible(true);
+            
         }
     }
-
+    
 
     class CancelButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
             reactivateMenu();
         }
     }
+
+// ------------------------------------------------------------------------------------------------  
 }
