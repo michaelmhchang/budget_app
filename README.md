@@ -5,7 +5,7 @@ Oh hi there, this is a simple budgeting app I'm working on. Any critique or upda
 - Main menu GUI
 - Income/Spending GUI
 - Income saves to a list of expenses
-- Spendings saves to a list of expense
+- Spendings saves to a list of expenses
 
 # Future Features 
 - ~~Spendings saves to the lists of expenses~~
