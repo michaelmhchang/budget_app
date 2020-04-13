@@ -3,6 +3,8 @@ import javax.swing.table.*;
 import java.awt.event.*;
 import java.awt.*;
 
+// To be add to main BudgetApp
+
 class ReportGraphic {
     private JFrame reportFrame;
     private JPanel reportPanel;
