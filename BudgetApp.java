@@ -12,14 +12,14 @@ public class BudgetApp {
     private JTextField spendingInput;
     private JButton addIncome;
     private JButton addSpending;
-    private JButton report;
+    private JButton reportButton;
 
     // Submenu
-    private static JTextField nameField;
-    private static JTextField amountField;
+    private  JTextField nameField;
+    private  JTextField amountField;
 
     // Calculating final report
-    private static ArrayList<Expense> expenseList;
+    private  ArrayList<Expense> expenseList;
 
 
     public BudgetApp() {
@@ -31,7 +31,8 @@ public class BudgetApp {
         testApp.activateMenu();
     }
 
-// --------------------------------------- ACTIVATE GRAPHICS ---------------------------------------  
+// --------------------------------- ACTIVATE GRAPHICS ---------------------------------  
+
     private void activateMenu() {
         // Main menu UI
 
@@ -40,8 +41,9 @@ public class BudgetApp {
         title = new JLabel("<html>Mo money <br/>" + " mo problems <html>");
         addIncome = new JButton("Add income");
         addSpending = new JButton("Add spending");
-        report = new JButton("Calculate report");
-
+        reportButton = new JButton("Calculate report");
+        
+        mainPanel.setBackground(Color.white);
         mainPanel.setLayout(new GridBagLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -50,11 +52,11 @@ public class BudgetApp {
         mainPanel.add(title, createMainGbc(0,0));
         mainPanel.add(addIncome, createMainGbc(1,1));
         mainPanel.add(addSpending, createMainGbc(1,2));
-        mainPanel.add(report, createMainGbc(0,3));
+        mainPanel.add(reportButton, createMainGbc(0,3));
 
         addIncome.addActionListener(new AddIncomeListener());
         addSpending.addActionListener(new AddSpendingListener());
-        report.addActionListener(new ReportListener());
+        reportButton.addActionListener(new ReportListener());
 
         frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
         frame.setSize(400, 400);
@@ -76,7 +78,7 @@ public class BudgetApp {
         title = new JLabel("<html>Mo money <br/>" + " mo problems <html>");
         addIncome = new JButton("Add income");
         addSpending = new JButton("Add spending");
-        report = new JButton("Calculate report");
+        reportButton = new JButton("Calculate report");
 
         mainPanel.setLayout(new GridBagLayout());
 
@@ -85,11 +87,11 @@ public class BudgetApp {
         mainPanel.add(title, createMainGbc(0,0));
         mainPanel.add(addIncome, createMainGbc(1,1));
         mainPanel.add(addSpending, createMainGbc(1,2));
-        mainPanel.add(report, createMainGbc(0,3));
+        mainPanel.add(reportButton, createMainGbc(0,3));
 
         addIncome.addActionListener(new AddIncomeListener());
         addSpending.addActionListener(new AddSpendingListener());
-        report.addActionListener(new ReportListener());
+        reportButton.addActionListener(new ReportListener());
 
         addIncome.setPreferredSize(addSpending.getPreferredSize());
 
@@ -134,10 +136,11 @@ public class BudgetApp {
 
     }
 
-// ----------------------------------------------------------------------------------------------------  
+// ------------------------------------------------------------------------------------  
 
 
-// --------------------------------------- GRID BAG CONSTRAINTS ---------------------------------------  
+// ------------------------------- GRID BAG CONSTRAINTS -------------------------------  
+
     private GridBagConstraints createMainGbc(int x, int y) {
         GridBagConstraints gbc = new GridBagConstraints();
         final Insets SPACING = new Insets(0, 5, 5 ,5);
@@ -167,10 +170,10 @@ public class BudgetApp {
         return gbc;
     }
 
-// ------------------------------------------------------------------------------------------------  
+// ----------------------------------------------------------------------------------------  
 
 
-// --------------------------------------- ACTION LISTENERS ---------------------------------------  
+// ----------------------------------- ACTION LISTENERS -----------------------------------  
 
     class AddIncomeListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
@@ -258,5 +261,5 @@ public class BudgetApp {
         }
     }
 
-// ------------------------------------------------------------------------------------------------  
+// -------------------------------------------------------------------------------------------  
 }
