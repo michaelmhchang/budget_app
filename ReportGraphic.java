@@ -3,14 +3,14 @@ import javax.swing.table.*;
 import java.awt.event.*;
 import java.awt.*;
 
-// To be add to main BudgetApp
-
 class ReportGraphic {
     private JFrame reportFrame;
     private JPanel reportPanel;
     private JTable reportTable;
-    private DefaultTableModel uneditModel;
+    private uneditModel reportModel;
     private JTableHeader header;
+    JButton b1;
+    JScrollPane tableScroll;
 
     public static void main(String[] args) {
         ReportGraphic report = new ReportGraphic();
@@ -39,66 +39,73 @@ class ReportGraphic {
 
         reportTable = new JTable(data, colNames);
         header = reportTable.getTableHeader();
-        JScrollPane tableScroll = new JScrollPane(reportTable);
-
-        uneditModel = new DefaultTableModel(data, colNames) {
-            @Override
-            public boolean isCellEditable(int row, int col) {
-                return false;
-            }
-        };
+        tableScroll = new JScrollPane(reportTable);
+        reportModel = new uneditModel(data, colNames);
         // ---------------------------------------------------------------------
         
-        reportFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        reportPanel.setLayout(new GridLayout(2,1));
+        reportPanel.setLayout(new GridBagLayout());
+        // reportPanel.setLayout(new GridLayout(2,1));
 
-// panel formating
-// ----------------------------------------------------------------------
+        // panel formating
+        // ----------------------------------------------------------------------
         reportPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-// ----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
 
 
-// table formatting 
-// ----------------------------------------------------------------------
-        tableScroll.setBorder(BorderFactory.createEmptyBorder());
-
+        // table formatting 
+        // ----------------------------------------------------------------------
         header.setDefaultRenderer(new HeaderRenderer(reportTable));
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
 
-        reportTable.setModel(uneditModel);
+        reportTable.setModel(reportModel);
 
         reportTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         reportTable.getColumnModel().getColumn(1).setPreferredWidth(225);
         reportTable.getColumnModel().getColumn(2).setPreferredWidth(40);
         reportTable.getColumnModel().getColumn(3).setPreferredWidth(40);
         
-        reportTable.setBackground(defaultColor);
         reportTable.setShowHorizontalLines(false);
-
-// ----------------------------------------------------------------------
-        JButton b1 = new JButton("1");
-        reportPanel.add(tableScroll);
-        reportPanel.add(b1);
-        reportFrame.getContentPane().add(reportPanel);
-        reportFrame.setSize(500, 500);
-        reportFrame.setVisible(true);
-
-        tableScroll.setSize(reportTable.getSize());
-
-        int frameWidth = tableScroll.getSize().width;
-        int frameHeight = tableScroll.getSize().height + b1.getSize().height + 20;
-        System.out.println(frameHeight);
-        reportFrame.setSize(frameWidth, frameHeight);
         
-        System.out.println(tableScroll.getSize());
-        System.out.println(reportTable.getSize());
-        System.out.println(b1.getSize());
+        if(reportTable.getPreferredSize().height <= 240) {
+            reportTable.setPreferredScrollableViewportSize(reportTable.getPreferredSize());
+        } else {
+            reportTable.setPreferredScrollableViewportSize(
+                    new Dimension(reportTable.getPreferredSize().width, 240));
+        }
+        // ----------------------------------------------------------------------
+        
+        b1 = new JButton("test");
+
+        b1.addActionListener(new B1Listener());
+
+        reportPanel.add(tableScroll, reportGbc(0,0));
+        reportPanel.add(b1, reportGbc(0,1));
+       
+        reportFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        reportFrame.getContentPane().add(reportPanel);
+        reportFrame.setVisible(true);
+        reportFrame.setSize(600, reportFrame.getPreferredSize().height);
     }
 
+    // Gridbagconstraint
+    // ----------------------------------------------------------------------
+    private GridBagConstraints reportGbc(int x, int y) {
+        GridBagConstraints gbc = new GridBagConstraints();
+         
+        gbc.gridx = x;
+        gbc.gridy = y;
 
-// class for header rendering
-// ----------------------------------------------------------------------
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+            
+        return gbc;
+    }
+    // ----------------------------------------------------------------------
+
+
+    // class for header rendering
+    // ----------------------------------------------------------------------
     private static class HeaderRenderer implements TableCellRenderer {
         DefaultTableCellRenderer renderer;
 
@@ -117,5 +124,29 @@ class ReportGraphic {
                     row, col);
         }
     }
-// ----------------------------------------------------------------------
+    // ----------------------------------------------------------------------
+
+
+    // Overriding table model
+    // ----------------------------------------------------------------------
+    private class uneditModel extends DefaultTableModel {
+
+        public uneditModel(Object[][] data, Object[] col) {
+            super(data, col);
+        }
+            
+        @Override
+        public boolean isCellEditable(int row, int col) {
+                return false;
+        }
+    }
+    // ----------------------------------------------------------------------
+
+    public class B1Listener implements ActionListener {
+        public void actionPerformed(ActionEvent ev) {
+            System.out.println(reportFrame.getPreferredSize());
+            System.out.println(reportFrame.getSize());
+        }
+    }
+
 }
