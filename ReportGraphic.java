@@ -6,11 +6,23 @@ import java.awt.*;
 class ReportGraphic {
     private JFrame reportFrame;
     private JPanel reportPanel;
+
+    // Main table 
+    // ----------------------------------------------------------------------
     private JTable reportTable;
-    private uneditModel reportModel;
+    private UneditModel reportModel;
     private JTableHeader header;
+    private JScrollPane tableScroll;
+    // ----------------------------------------------------------------------
+
+    private JTable totalTable;
+    private UneditModel totalModel;
+    private JScrollPane totalScroll;
+    private DefaultTableCellRenderer rightRender;
+
     JButton b1;
-    JScrollPane tableScroll;
+    JButton b2;
+
 
     public static void main(String[] args) {
         ReportGraphic report = new ReportGraphic();
@@ -19,11 +31,17 @@ class ReportGraphic {
 
     public void activate() {
         reportFrame = new JFrame("Report");
+
+        Color defaultColor = new Color(238,238,238);
+        // panel formating
+        // ----------------------------------------------------------------------
         reportPanel = new JPanel();
+        reportPanel.setLayout(new GridBagLayout());
+        reportPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        // ----------------------------------------------------------------------
 
-        Color defaultColor = new Color(213,213,213);
 
-        // initialize table components
+        // table formatting 
         // ----------------------------------------------------------------------
         Object[] colNames = {"Date", "Name", "Income", "Spendings"};
         Object[][] data = {
@@ -35,35 +53,56 @@ class ReportGraphic {
             {5,6,7,8},
             {5,6,7,8},
             {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
+            {5,6,7,8},
             {5,6,7,8}};
 
-        reportTable = new JTable(data, colNames);
+        reportTable = new JTable();
         header = reportTable.getTableHeader();
         tableScroll = new JScrollPane(reportTable);
-        reportModel = new uneditModel(data, colNames);
-        // ---------------------------------------------------------------------
-        
-        reportPanel.setLayout(new GridBagLayout());
-        // reportPanel.setLayout(new GridLayout(2,1));
+        reportModel = new UneditModel(data, colNames);
 
-        // panel formating
-        // ----------------------------------------------------------------------
-        reportPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        // ----------------------------------------------------------------------
+        reportTable.setModel(reportModel);
 
-
-        // table formatting 
-        // ----------------------------------------------------------------------
         header.setDefaultRenderer(new HeaderRenderer(reportTable));
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
 
-        reportTable.setModel(reportModel);
 
-        reportTable.getColumnModel().getColumn(0).setPreferredWidth(50);
-        reportTable.getColumnModel().getColumn(1).setPreferredWidth(225);
-        reportTable.getColumnModel().getColumn(2).setPreferredWidth(40);
-        reportTable.getColumnModel().getColumn(3).setPreferredWidth(40);
+        reportTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+        reportTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+        reportTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+        reportTable.getColumnModel().getColumn(3).setPreferredWidth(90);
         
         reportTable.setShowHorizontalLines(false);
         
@@ -74,18 +113,56 @@ class ReportGraphic {
                     new Dimension(reportTable.getPreferredSize().width, 240));
         }
         // ----------------------------------------------------------------------
+
+        // Income/spending total section
+        // ----------------------------------------------------------------------
+        Object[] totalName = {"Total", "Income Total", "Spending total"};
+        Object[][] totalData = {{"Income/Spending Total: ", 1000, 200}};
         
-        b1 = new JButton("test");
+        rightRender = new DefaultTableCellRenderer();
+        rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        totalTable = new JTable();
+        totalModel = new UneditModel(totalData, totalName);
+        totalTable.setRowSelectionAllowed(false);
+        totalTable.setTableHeader(null);
+
+        totalTable.setModel(totalModel);
+        
+        totalTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+
+        totalTable.getColumnModel().getColumn(0).setPreferredWidth(400);
+        totalTable.getColumnModel().getColumn(1).setPreferredWidth(90);
+        totalTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+
+        totalTable.setBackground(defaultColor);
+
+        totalTable.setPreferredScrollableViewportSize(totalTable.getPreferredSize());
+
+        totalScroll = new JScrollPane(totalTable);
+        // ----------------------------------------------------------------------
+        
+        b1 = new JButton("before");
+        b2 = new JButton("after");
+        JLabel test = new JLabel(" ");
 
         b1.addActionListener(new B1Listener());
-
+        
         reportPanel.add(tableScroll, reportGbc(0,0));
-        reportPanel.add(b1, reportGbc(0,1));
-       
+        reportPanel.add(totalScroll, reportGbc(0,1));
+        reportPanel.add(test, reportGbc(0,2));
+        reportPanel.add(b1, reportGbc(0,3));
+        reportPanel.add(b2, reportGbc(0,4));
+        
         reportFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         reportFrame.getContentPane().add(reportPanel);
+        reportFrame.pack();
         reportFrame.setVisible(true);
-        reportFrame.setSize(600, reportFrame.getPreferredSize().height);
+        reportFrame.setResizable(false);
+
+        System.out.println(reportPanel.getBackground());
+        b2.addActionListener(new B2Listener());
+        
     }
 
     // Gridbagconstraint
@@ -95,23 +172,25 @@ class ReportGraphic {
          
         gbc.gridx = x;
         gbc.gridy = y;
-
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1;
+        
+        if(y == 0 || y == 1) {
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.weightx = 1;
+        }
             
         return gbc;
     }
     // ----------------------------------------------------------------------
 
 
-    // class for header rendering
+    // overriding header rendering
     // ----------------------------------------------------------------------
     private static class HeaderRenderer implements TableCellRenderer {
         DefaultTableCellRenderer renderer;
 
         public HeaderRenderer(JTable table) {
             renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
-            renderer.setHorizontalAlignment(JLabel.LEFT);
+            renderer.setHorizontalAlignment(SwingConstants.LEFT);
         }
 
         @Override
@@ -129,9 +208,9 @@ class ReportGraphic {
 
     // Overriding table model
     // ----------------------------------------------------------------------
-    private class uneditModel extends DefaultTableModel {
+    private class UneditModel extends DefaultTableModel {
 
-        public uneditModel(Object[][] data, Object[] col) {
+        public UneditModel(Object[][] data, Object[] col) {
             super(data, col);
         }
             
@@ -144,9 +223,24 @@ class ReportGraphic {
 
     public class B1Listener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
+            System.out.println("------------------------------------------------");
+            System.out.println(tableScroll.getPreferredSize());
+            System.out.println(reportTable.getPreferredSize());
+            System.out.println(reportPanel.getPreferredSize());
             System.out.println(reportFrame.getPreferredSize());
+            System.out.println("------------------------------------------------");
+            System.out.println(reportPanel.getSize());
             System.out.println(reportFrame.getSize());
+            
         }
     }
+
+    public class B2Listener implements ActionListener {
+        public void actionPerformed(ActionEvent ev) {
+        }
+                    
+    }
+
+
 
 }
