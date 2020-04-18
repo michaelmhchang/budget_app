@@ -7,7 +7,7 @@ class ReportGraphic {
     private JFrame reportFrame;
     private JPanel reportPanel;
 
-    // Main table 
+    // Main Table 
     // ----------------------------------------------------------------------
     private JTable reportTable;
     private UneditModel reportModel;
@@ -15,10 +15,19 @@ class ReportGraphic {
     private JScrollPane tableScroll;
     // ----------------------------------------------------------------------
 
+    // Income/Spending Total
+    // ----------------------------------------------------------------------
     private JTable totalTable;
     private UneditModel totalModel;
     private JScrollPane totalScroll;
-    private DefaultTableCellRenderer rightRender;
+    // ----------------------------------------------------------------------
+
+    // Net Total
+    // ----------------------------------------------------------------------
+    private JTable netTable;
+    private JScrollPane netScroll;
+    // ----------------------------------------------------------------------
+
 
     JButton b1;
     JButton b2;
@@ -33,7 +42,8 @@ class ReportGraphic {
         reportFrame = new JFrame("Report");
 
         Color defaultColor = new Color(238,238,238);
-        // panel formating
+
+        // Panel Formatting
         // ----------------------------------------------------------------------
         reportPanel = new JPanel();
         reportPanel.setLayout(new GridBagLayout());
@@ -41,7 +51,7 @@ class ReportGraphic {
         // ----------------------------------------------------------------------
 
 
-        // table formatting 
+        // Table Formatting 
         // ----------------------------------------------------------------------
         Object[] colNames = {"Date", "Name", "Income", "Spendings"};
         Object[][] data = {
@@ -77,20 +87,17 @@ class ReportGraphic {
             {5,6,7,8},
             {5,6,7,8},
             {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
-            {5,6,7,8},
             {5,6,7,8}};
 
         reportTable = new JTable();
         header = reportTable.getTableHeader();
         tableScroll = new JScrollPane(reportTable);
-        reportModel = new UneditModel(data, colNames);
+        DefaultTableModel reportModel = new DefaultTableModel(data, colNames) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
 
         reportTable.setModel(reportModel);
 
@@ -114,13 +121,10 @@ class ReportGraphic {
         }
         // ----------------------------------------------------------------------
 
-        // Income/spending total section
+        // Income/Spending Total Section
         // ----------------------------------------------------------------------
         Object[] totalName = {"Total", "Income Total", "Spending total"};
         Object[][] totalData = {{"Income/Spending Total: ", 1000, 200}};
-        
-        rightRender = new DefaultTableCellRenderer();
-        rightRender.setHorizontalAlignment(SwingConstants.RIGHT);
 
         totalTable = new JTable();
         totalModel = new UneditModel(totalData, totalName);
@@ -128,8 +132,9 @@ class ReportGraphic {
         totalTable.setTableHeader(null);
 
         totalTable.setModel(totalModel);
-        
-        totalTable.getColumnModel().getColumn(0).setCellRenderer(rightRender);
+        CellRenderer totalRenderer = new CellRenderer();
+        totalRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        totalTable.getColumnModel().getColumn(0).setCellRenderer(totalRenderer);
 
         totalTable.getColumnModel().getColumn(0).setPreferredWidth(400);
         totalTable.getColumnModel().getColumn(1).setPreferredWidth(90);
@@ -142,6 +147,24 @@ class ReportGraphic {
         totalScroll = new JScrollPane(totalTable);
         // ----------------------------------------------------------------------
         
+        // Net Income Section 
+        // ----------------------------------------------------------------------
+        Object[] netName = {"Net Total", "Total"};
+        Object[][] netTotal = {{"Net Total: ", 10000}};
+
+        netTable = new JTable(netTotal, netName);
+        
+        netTable.setTableHeader(null);
+        netTable.setShowVerticalLines(false);
+        netTable.setPreferredScrollableViewportSize(netTable.getPreferredSize());
+
+        CellRenderer netRenderer = new CellRenderer();
+        netTable.getColumnModel().getColumn(0).setCellRenderer(netRenderer);
+
+        netScroll = new JScrollPane(netTable);
+        // ----------------------------------------------------------------------
+
+
         b1 = new JButton("before");
         b2 = new JButton("after");
         JLabel test = new JLabel(" ");
@@ -151,8 +174,9 @@ class ReportGraphic {
         reportPanel.add(tableScroll, reportGbc(0,0));
         reportPanel.add(totalScroll, reportGbc(0,1));
         reportPanel.add(test, reportGbc(0,2));
-        reportPanel.add(b1, reportGbc(0,3));
-        reportPanel.add(b2, reportGbc(0,4));
+        reportPanel.add(netScroll, reportGbc(0,3));
+        reportPanel.add(b1, reportGbc(0,4));
+        reportPanel.add(b2, reportGbc(0,5));
         
         reportFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         reportFrame.getContentPane().add(reportPanel);
@@ -160,12 +184,11 @@ class ReportGraphic {
         reportFrame.setVisible(true);
         reportFrame.setResizable(false);
 
-        System.out.println(reportPanel.getBackground());
         b2.addActionListener(new B2Listener());
         
     }
 
-    // Gridbagconstraint
+    // GridBagConstraint
     // ----------------------------------------------------------------------
     private GridBagConstraints reportGbc(int x, int y) {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -176,6 +199,9 @@ class ReportGraphic {
         if(y == 0 || y == 1) {
             gbc.anchor = GridBagConstraints.WEST;
             gbc.weightx = 1;
+        }else if(y == 3) {
+            gbc.anchor = GridBagConstraints.EAST;
+            gbc.weightx = 1;
         }
             
         return gbc;
@@ -183,14 +209,15 @@ class ReportGraphic {
     // ----------------------------------------------------------------------
 
 
-    // overriding header rendering
+// HEADER RENDERING
+    // Header renderer (Aligning left)
     // ----------------------------------------------------------------------
-    private static class HeaderRenderer implements TableCellRenderer {
+    private class HeaderRenderer implements TableCellRenderer {
         DefaultTableCellRenderer renderer;
 
         public HeaderRenderer(JTable table) {
             renderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
-            renderer.setHorizontalAlignment(SwingConstants.LEFT);
+            renderer.setHorizontalAlignment(JLabel.LEFT);
         }
 
         @Override
@@ -204,9 +231,33 @@ class ReportGraphic {
         }
     }
     // ----------------------------------------------------------------------
+    
+    // Cell renderer (Bold)
+    // ----------------------------------------------------------------------
+    public class CellRenderer extends DefaultTableCellRenderer {
+        public Component getTableCellRendererComponent(
+                JTable table, Object value,
+                boolean isSelected, boolean hasFocus,
+                int row, int col) {
+            Component renderer = super.getTableCellRendererComponent(
+                    table, value,
+                    isSelected, hasFocus,
+                    row, col);
+
+            if(value == "Income/Spending Total: ") {
+                renderer.setFont(renderer.getFont().deriveFont(Font.BOLD));
+            } else if(value == "Net Total: ") {
+                renderer.setFont(renderer.getFont().deriveFont(Font.BOLD));
+            }
+
+            return renderer;
+        }
+        
+    }
+    // ----------------------------------------------------------------------
 
 
-    // Overriding table model
+    // Table Model (No editting)
     // ----------------------------------------------------------------------
     private class UneditModel extends DefaultTableModel {
 
@@ -240,7 +291,5 @@ class ReportGraphic {
         }
                     
     }
-
-
 
 }
