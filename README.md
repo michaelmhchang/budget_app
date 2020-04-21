@@ -9,7 +9,8 @@ Oh hi there, this is a simple budgeting app I'm working on. Any critique or upda
 
 # Future Features 
 - ~~Spendings saves to the lists of expenses~~
-- Report GUI (Includes all Income, spendings, and the total saved or lost in table format) 
+- ~~Report GUI (Includes all Income, spendings, and the total saved or lost in table format)~~
+- Get information from users 
 - Serialize objects so that previous sessions can be loaded up
 - More professional labels (Just making things a bit more fun with current labels) 
 - Export report to PDF (Maybe)
