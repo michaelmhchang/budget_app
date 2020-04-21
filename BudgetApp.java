@@ -1,5 +1,6 @@
 import java.util.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.event.*;
 import java.awt.*;
 
@@ -33,11 +34,11 @@ public class BudgetApp {
 
 
     // ACTIVATE GRAPHICS
-    // ---------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------
     private void activateMenu() {
         // Main menu UI
 
-        frame = new JFrame("Budget app v1.0.0");
+        frame = new JFrame("Budget app v1.0");
         mainPanel = new JPanel();
         title = new JLabel("<html>Mo money <br/>" + " mo problems <html>");
         addIncome = new JButton("Add income");
@@ -50,10 +51,10 @@ public class BudgetApp {
 
         title.setFont(new Font("Alex Brush", Font.BOLD, 40));
 
-        mainPanel.add(title, createMainGbc(0,0));
-        mainPanel.add(addIncome, createMainGbc(1,1));
-        mainPanel.add(addSpending, createMainGbc(1,2));
-        mainPanel.add(reportButton, createMainGbc(0,3));
+        mainPanel.add(title, maingGbc(0,0));
+        mainPanel.add(addIncome, maingGbc(1,1));
+        mainPanel.add(addSpending, maingGbc(1,2));
+        mainPanel.add(reportButton, maingGbc(0,3));
 
         addIncome.addActionListener(new AddIncomeListener());
         addSpending.addActionListener(new AddSpendingListener());
@@ -67,9 +68,8 @@ public class BudgetApp {
     }
 
 
-    private void reactivateMenu() {
+    public void reactivateMenu() {
         // For going back to the main menu again
-
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
@@ -85,10 +85,10 @@ public class BudgetApp {
 
         title.setFont(new Font("Alex Brush", Font.BOLD, 30));
 
-        mainPanel.add(title, createMainGbc(0,0));
-        mainPanel.add(addIncome, createMainGbc(1,1));
-        mainPanel.add(addSpending, createMainGbc(1,2));
-        mainPanel.add(reportButton, createMainGbc(0,3));
+        mainPanel.add(title, maingGbc(0,0));
+        mainPanel.add(addIncome, maingGbc(1,1));
+        mainPanel.add(addSpending, maingGbc(1,2));
+        mainPanel.add(reportButton, maingGbc(0,3));
 
         addIncome.addActionListener(new AddIncomeListener());
         addSpending.addActionListener(new AddSpendingListener());
@@ -119,12 +119,12 @@ public class BudgetApp {
             mainPanel.setLayout(new GridBagLayout());
 
             mainPanel.setBorder(BorderFactory.createTitledBorder(type));
-            mainPanel.add(name, createSubGbc(0,0));
-            mainPanel.add(nameField, createSubGbc(1,0));
-            mainPanel.add(amount, createSubGbc(0,1));
-            mainPanel.add(amountField, createSubGbc(1,1));
-            mainPanel.add(saveButton, createSubGbc(0,2));
-            mainPanel.add(cancelButton, createSubGbc(1,2));
+            mainPanel.add(name, subGbc(0,0));
+            mainPanel.add(nameField, subGbc(1,0));
+            mainPanel.add(amount, subGbc(0,1));
+            mainPanel.add(amountField, subGbc(1,1));
+            mainPanel.add(saveButton, subGbc(0,2));
+            mainPanel.add(cancelButton, subGbc(1,2));
 
             cancelButton.setPreferredSize(saveButton.getPreferredSize());
 
@@ -137,13 +137,106 @@ public class BudgetApp {
 
     }
 
-    // ---------------------------------------------------------------------------------------------
 
+    class ReportGraphic {
+        private JPanel buttonPanel;
+        private JButton returnToMainButton;
+        private JButton saveToPdfButton;
+    
+        public void createReportGraphic() {
+            Color defaultColor = new Color(238,238,238);
+            Date date = new Date();
+            Object[] colNames = {"Date", "Name", "Income", "Spendings"};
+            Object[][] data = {
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+                {date,"Test",3,4},
+            };
+    
+            buttonPanel = new JPanel();
+    
+            mainPanel.setLayout(new GridBagLayout());
+            buttonPanel.setLayout(new GridBagLayout());
+    
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+    
+            MainReportTableSection mainSection = new MainReportTableSection(data, colNames);
+            TotalSection totalSection = new TotalSection();
+            NetTotalSection netSection = new NetTotalSection();
+    
+            JScrollPane mainPane = mainSection.createMainTable();
+            JScrollPane totalPane = totalSection.createTotalTable();
+            JScrollPane netTotalPane = netSection.createNetTotalTable();
+    
+            JLabel space = new JLabel(" ");
+            JLabel space2 = new JLabel(" ");
+            JLabel buttonSpace = new JLabel("<html><br/><br/><br/></html>");
+    
+            returnToMainButton = new JButton("Return to the Main Menu");
+            saveToPdfButton = new JButton("Save to PDF");
+    
+            Border defaultButtonBorder = returnToMainButton.getBorder();
+    
+            returnToMainButton.addActionListener(new CancelButtonListener());
+   
+            saveToPdfButton.setEnabled(false);
+    
+            buttonPanel.add(saveToPdfButton, reportGbc(0,0));
+            buttonPanel.add(buttonSpace, reportGbc(1,0));
+            buttonPanel.add(returnToMainButton, reportGbc(2,0));
+    
+            mainPanel.add(mainPane, reportGbc(0,0));
+            mainPanel.add(totalPane, reportGbc(0,1));
+            mainPanel.add(space, reportGbc(0,2));
+            mainPanel.add(netTotalPane, reportGbc(0,3));
+            mainPanel.add(space2, reportGbc(0,4));
+            mainPanel.add(buttonPanel, reportGbc(0,5));
+            mainPanel.setBackground(defaultColor);
+    
+            frame.pack();
+            frame.setResizable(false);
+    
+            Border defaultPaneBorder = totalPane.getBorder();
+    
+            int scrollBarWidth = mainPane.getVerticalScrollBar().getSize().width;
+            netTotalPane.setBorder(BorderFactory.createCompoundBorder(
+                    new EmptyBorder(0, 0, 0, scrollBarWidth),
+                    defaultPaneBorder));
+        }
+    }
+    // -----------------------------------------------------------------------------------------
 
     // GridBagConstraints 
-    // ---------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------
 
-    private GridBagConstraints createMainGbc(int x, int y) {
+    private GridBagConstraints maingGbc(int x, int y) {
         GridBagConstraints gbc = new GridBagConstraints();
         final Insets SPACING = new Insets(0, 5, 5 ,5);
 
@@ -156,7 +249,7 @@ public class BudgetApp {
         return gbc;
     }
 
-    private GridBagConstraints createSubGbc(int x, int y) {
+    private GridBagConstraints subGbc(int x, int y) {
         GridBagConstraints gbc = new GridBagConstraints();
         final Insets SPACING = new Insets(0, 5, 5 ,5);
 
@@ -172,11 +265,28 @@ public class BudgetApp {
         return gbc;
     }
 
-    // ---------------------------------------------------------------------------------------------
+    private GridBagConstraints reportGbc(int x, int y) {
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = x;
+        gbc.gridy = y;
+
+        if(y == 1) {
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.weightx = 1;
+        } else if(y == 3) {
+            gbc.anchor = GridBagConstraints.EAST;
+            gbc.weightx = 1;
+        }
+
+        return gbc;
+    }
+
+    // -----------------------------------------------------------------------------------------
 
 
     // ACTION LISTENERS
-    // ---------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------
 
     class AddIncomeListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
@@ -211,6 +321,7 @@ public class BudgetApp {
         }
     }
 
+
     class SaveListener implements ActionListener {
         private String name;
         private double amount;
@@ -233,30 +344,16 @@ public class BudgetApp {
     
     // Need to continue updating (used for testing for now)
     class ReportListener implements ActionListener {
-        private JFrame reportFrame;
-        private JPanel reportPanel;
-        private JTable reportTable;
-        private JScrollPane scrollReport;
+        private ReportGraphic report;
 
         public void actionPerformed(ActionEvent ev) {
-            reportFrame =  new JFrame("Report");
-            reportPanel = new JPanel();
-
-            String[] colNames = {"Date", "Name", "Income", "Spendings"};
-            Object[][] data = {{1,2,3,4}};
-            
-            reportTable = new JTable(data, colNames);
-            scrollReport = new JScrollPane(reportTable);
-
-            reportPanel.add(scrollReport);
-
-            reportFrame.getContentPane().add(BorderLayout.CENTER, reportPanel);
-            reportFrame.pack();
-            reportFrame.setVisible(true);
-            
+            mainPanel.removeAll();
+            mainPanel.revalidate();
+            mainPanel.repaint();
+            report = new ReportGraphic();
+            report.createReportGraphic();
         }
     }
-    
 
     class CancelButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent ev) {
@@ -264,5 +361,5 @@ public class BudgetApp {
         }
     }
 
-    // ---------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------
 }
