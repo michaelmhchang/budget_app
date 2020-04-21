@@ -6,6 +6,7 @@ Oh hi there, this is a simple budgeting app I'm working on. Any critique or upda
 - Income/Spending GUI
 - Income saves to a list of expenses
 - Spendings saves to a list of expenses
+- Report GUI (Includes all Income, spendings, and the total saved or lost in table format)
 
 # Future Features 
 - ~~Spendings saves to the lists of expenses~~
