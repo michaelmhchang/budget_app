@@ -10,15 +10,13 @@ public class MainReportTableSection {
     private Object[] colNames;
     private Object[][] data;
 
-    public MainReportTable(Object[][] data, Object[] colNames) {
+    public MainReportTableSection(Object[][] data, Object[] colNames) {
         this.colNames = colNames;
         this.data = data; 
     }
 
-    public JScrollPane makeMainTable() {
+    public JScrollPane createMainTable() {
 
-        // Table Formatting
-        // ----------------------------------------------------------------------
         table = new JTable();
         header = table.getTableHeader();
         scrollPane = new JScrollPane(table);
@@ -42,10 +40,7 @@ public class MainReportTableSection {
                     new Dimension(table.getPreferredSize().width, 240));
         }
 
-        // ----------------------------------------------------------------------
-
         return scrollPane; 
-
     }
 
     private class MainModel extends DefaultTableModel {

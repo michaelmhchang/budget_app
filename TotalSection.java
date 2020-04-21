@@ -7,8 +7,8 @@ public class TotalSection {
     private JTableHeader header;
     private JScrollPane scrollPane;
     private Color defaultColor;
-  
-    public JScrollPane activateTotalSection() {
+
+    public JScrollPane createTotalTable() {
         Object[] colNames = {"Total", "Income Total", "Spending total"};
         Object[][] data = {{"Income/Spending Total: ", 1000, 200}};
 
@@ -61,6 +61,9 @@ public class TotalSection {
                     table, value,
                     isSelected, hasFocus,
                     row, col);
+
+            renderer.setFont(renderer.getFont().deriveFont(20));
+
             if(value == "Income/Spending Total: ") {
                 renderer.setHorizontalAlignment(JLabel.RIGHT);
                 renderer.setFont(renderer.getFont().deriveFont(Font.BOLD));
