@@ -1,7 +1,9 @@
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.lang.*;
 
 public class MainReportTableSection {
     private JTable table;
@@ -10,9 +12,31 @@ public class MainReportTableSection {
     private Object[] colNames;
     private Object[][] data;
 
-    public MainReportTableSection(Object[][] data, Object[] colNames) {
-        this.colNames = colNames;
-        this.data = data; 
+    public MainReportTableSection(ArrayList<Expense> expenses) {
+        colNames = new Object[4];
+
+        colNames[0] = "Date";
+        colNames[1] = "Name";
+        colNames[2] = "Income";
+        colNames[3] = "Spendings";
+
+        data = new Object[expenses.size()][4];
+
+        for(int expense = 0; expense < expenses.size(); expense++) { 
+            Expense currExpense = expenses.get(expense);
+
+            if(currExpense.getType() == "Income") {
+                data[expense][0] = currExpense.getDate();
+                data[expense][1] = currExpense.getName();
+                data[expense][2] = currExpense.getAmount();
+                data[expense][3] = null;
+            } else {
+                data[expense][0] = currExpense.getDate();
+                data[expense][1] = currExpense.getName();
+                data[expense][2] = null;
+                data[expense][3] = currExpense.getAmount();
+            }
+        }
     }
 
     public JScrollPane createMainTable() {
@@ -56,7 +80,12 @@ public class MainReportTableSection {
         
         @Override
         public Class getColumnClass(int c) {
-            return getValueAt(0,c).getClass();
+            Object doubleValue = 1.11;
+            if(getValueAt(0,c) == null) {
+                return doubleValue.getClass();
+            } else {
+                return getValueAt(0,c).getClass();
+            }
         }
     }
 }

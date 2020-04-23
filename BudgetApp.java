@@ -45,7 +45,6 @@ public class BudgetApp {
         addSpending = new JButton("Add spending");
         reportButton = new JButton("Calculate report");
         
-        mainPanel.setBackground(Color.white);
         mainPanel.setLayout(new GridBagLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -63,6 +62,7 @@ public class BudgetApp {
         frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
         frame.setSize(400, 400);
         frame.setVisible(true);
+        frame.setResizable(false);
 
         addIncome.setPreferredSize(addSpending.getPreferredSize());
     }
@@ -74,14 +74,13 @@ public class BudgetApp {
         mainPanel.revalidate();
         mainPanel.repaint();
 
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
         title = new JLabel("<html>Mo money <br/>" + " mo problems <html>");
         addIncome = new JButton("Add income");
         addSpending = new JButton("Add spending");
         reportButton = new JButton("Calculate report");
 
         mainPanel.setLayout(new GridBagLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 
         title.setFont(new Font("Alex Brush", Font.BOLD, 30));
 
@@ -144,33 +143,9 @@ public class BudgetApp {
         private JButton saveToPdfButton;
     
         public void createReportGraphic() {
-            Color defaultColor = new Color(238,238,238);
             Date date = new Date();
             Object[] colNames = {"Date", "Name", "Income", "Spendings"};
             Object[][] data = {
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
-                {date,"Test",3,4},
                 {date,"Test",3,4},
                 {date,"Test",3,4},
                 {date,"Test",3,4},
@@ -187,9 +162,9 @@ public class BudgetApp {
     
             mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
     
-            MainReportTableSection mainSection = new MainReportTableSection(data, colNames);
-            TotalSection totalSection = new TotalSection();
-            NetTotalSection netSection = new NetTotalSection();
+            MainReportTableSection mainSection = new MainReportTableSection(expenseList);
+            TotalSection totalSection = new TotalSection(expenseList);
+            NetTotalSection netSection = new NetTotalSection(expenseList);
     
             JScrollPane mainPane = mainSection.createMainTable();
             JScrollPane totalPane = totalSection.createTotalTable();
@@ -218,10 +193,8 @@ public class BudgetApp {
             mainPanel.add(netTotalPane, reportGbc(0,3));
             mainPanel.add(space2, reportGbc(0,4));
             mainPanel.add(buttonPanel, reportGbc(0,5));
-            mainPanel.setBackground(defaultColor);
     
             frame.pack();
-            frame.setResizable(false);
     
             Border defaultPaneBorder = totalPane.getBorder();
     
@@ -334,7 +307,7 @@ public class BudgetApp {
         public void actionPerformed(ActionEvent ev) {
             name = nameField.getText();
             amount = Double.parseDouble(amountField.getText());
-            expenseList.add(new Expense(name, "Income", amount));
+            expenseList.add(new Expense(name, type, amount));
 
             nameField.setText("");
             amountField.setText("");

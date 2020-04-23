@@ -1,17 +1,42 @@
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class TotalSection {
     private JTable table;
     private JTableHeader header;
     private JScrollPane scrollPane;
     private Color defaultColor;
+    private Object[] colNames;
+    private Object[][] data;
+
+    public TotalSection(ArrayList<Expense> expenses) {
+        colNames = new Object[3];
+        data = new Object[1][3];
+        
+        double income = 0;
+        double spending = 0;
+
+        colNames[0] = "Total";
+        colNames[1] = "Income Total";
+        colNames[2] = "Spending Total";
+
+        for(Expense ex: expenses) {
+            if(ex.getType() == "Income") {
+                income += ex.getAmount();
+            } else {
+                spending += ex.getAmount();
+            }
+        }
+
+        data[0][0] = "Income/Spending Total: ";
+        data[0][1] = income;
+        data[0][2] = spending;
+
+    }
 
     public JScrollPane createTotalTable() {
-        Object[] colNames = {"Total", "Income Total", "Spending total"};
-        Object[][] data = {{"Income/Spending Total: ", 1000, 200}};
-
         defaultColor = new Color(238, 238, 238);
 
         table = new JTable();

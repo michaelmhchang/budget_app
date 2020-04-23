@@ -2,16 +2,39 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class NetTotalSection {
     private JTable table;
     private JScrollPane scrollPane;
     private NetRenderer renderer; 
     private Color defaultColor;
+    private Object[] colNames;
+    private Object[][] data;
+
+    public NetTotalSection(ArrayList<Expense> expenses) {
+        colNames = new Object[2];
+        data = new Object[1][2];
+
+        double netTotal = 0;
+
+        colNames[0] = "Total";
+        colNames[1] = "Amount";
+
+        for(Expense ex: expenses) {
+            if(ex.getType() == "Income") {
+                netTotal += ex.getAmount();
+            } else {
+                netTotal -= ex.getAmount();
+            }
+        }
+
+        data[0][0] = "Net Total: ";
+        data[0][1] = netTotal;
+        
+    }
 
     public JScrollPane createNetTotalTable() {
-        Object[] colNames = {"Total", "Amount"};
-        Object[][] data = {{"Net Total: ", 1}};
 
         defaultColor = new Color(238, 238, 238);
 

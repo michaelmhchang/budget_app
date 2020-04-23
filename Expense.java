@@ -3,7 +3,7 @@ import java.util.*;
 public class Expense {
     private String name;
     private String type; // Savings or Spending
-    private double amount;
+    private Double amount;
     private Date date;
 
     public Expense(String n, String t, double a) {
