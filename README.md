@@ -1,6 +1,12 @@
 # Budget App  
 Oh hi there, this is a simple budgeting app I'm working on. Any critique or update is appreciated. I am new to the Java language and trying to create something to learn more about it!
 
+# UI 
+![Main Menu](https://github.com/michaelolchang/budget_app/blob/master/main_menu.png)
+![Income Menu](https://github.com/michaelolchang/budget_app/blob/master/income_menu.png)
+![Spendings Menu](https://github.com/michaelolchang/budget_app/blob/master/spending_menu.png)
+![Report Table](https://github.com/michaelolchang/budget_app/blob/master/report_table.png)
+
 # Features so far
 - Main menu GUI
 - Income/Spending GUI
