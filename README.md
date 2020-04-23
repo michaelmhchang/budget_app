@@ -1,5 +1,5 @@
 # Budget App  
-Oh hi there, this is a simple budgeting app I'm working on. Any critique or update is appreciated. I am new to the Java language and trying to create something to learn more about it!
+Hello there, this is a simple budgeting app I'm working on. Any critique or update is appreciated. I am new to the Java language and trying to create something to learn more about it!
 
 # UI 
 ![Main Menu](https://github.com/michaelolchang/budget_app/blob/master/main_menu.png)  
@@ -13,11 +13,13 @@ Oh hi there, this is a simple budgeting app I'm working on. Any critique or upda
 - Income saves to a list of expenses
 - Spendings saves to a list of expenses
 - Report GUI (Includes all Income, spendings, and the total saved or lost in table format)
+- Get information from users
 
 # Future Features 
 - ~~Spendings saves to the lists of expenses~~
 - ~~Report GUI (Includes all Income, spendings, and the total saved or lost in table format)~~
-- Get information from users 
+- ~~Get information from users~~
+- Add trailing decimals to monetary value for easier visuals
 - Serialize objects so that previous sessions can be loaded up
 - More professional labels (Just making things a bit more fun with current labels) 
 - Export report to PDF (Maybe)
