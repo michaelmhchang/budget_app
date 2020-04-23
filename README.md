@@ -1,7 +1,7 @@
 # Budget App  
 Hello there, this is a simple budgeting app I'm working on. Any critique or update is appreciated. I am new to the Java language and trying to create something to learn more about it! 
 
-# BudgetApp.java is the main file 
+** BudgetApp.java is the main file **
 
 # UI 
 ![Main Menu](https://github.com/michaelolchang/budget_app/blob/master/main_menu.png)  
